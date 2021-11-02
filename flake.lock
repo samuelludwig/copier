@@ -33,43 +33,27 @@
     },
     "flake-utils_2": {
       "locked": {
-        "lastModified": 1610051610,
-        "narHash": "sha256-U9rPz/usA1/Aohhk7Cmc2gBrEEKRzcW4nwPWMPwja4Y=",
+        "lastModified": 1601282935,
+        "narHash": "sha256-WQAFV6sGGQxrRs3a+/Yj9xUYvhTpukQJIcMbIi7LCJ4=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "3982c9903e93927c2164caa727cd3f6a0e6d14cc",
+        "rev": "588973065fce51f4763287f0fda87a174d78bf48",
         "type": "github"
       },
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "iteration-utilities": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1607362985,
-        "narHash": "sha256-1r9sCSV609hgQ0IDHnLL7ybeRLeZYMu5iXq3ipB8TdY=",
-        "owner": "MSeifert04",
-        "repo": "iteration_utilities",
-        "rev": "05e81f80026f2138952bd1a410bc715c89d7ab04",
-        "type": "github"
-      },
-      "original": {
-        "owner": "MSeifert04",
-        "repo": "iteration_utilities",
         "type": "github"
       }
     },
     "jinja2": {
       "flake": false,
       "locked": {
-        "lastModified": 1633395276,
-        "narHash": "sha256-wIP5GuLgrOIFCliOjTMSjU3HCSt6t+TBaxn/7x0rePM=",
+        "lastModified": 1635870312,
+        "narHash": "sha256-alhZ7RSPtIQOkYSDwar3/s9azM8tPueNXVqaRtfv2N4=",
         "owner": "pallets",
         "repo": "jinja2",
-        "rev": "f20a9c9ccbbfae312581ca9e740dcbecc218fad0",
+        "rev": "f72597b8ccce73f963eafec2cdcd5a51b4b3e2ad",
         "type": "github"
       },
       "original": {
@@ -78,117 +62,70 @@
         "type": "github"
       }
     },
-    "jinja2-ansible-filters": {
-      "flake": false,
+    "mach-nix": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs",
+        "pypi-deps-db": "pypi-deps-db"
+      },
       "locked": {
-        "lastModified": 1586868174,
-        "narHash": "sha256-ghQIgrGl8lolA5zdw2809f50OpMvOqOuNRH7kqBXND8=",
-        "ref": "master",
-        "rev": "9bc8fcc3950008bee9ebc06d0aae801f84437e2a",
-        "revCount": 39,
-        "type": "git",
-        "url": "https://gitlab.com/dreamer-labs/libraries/jinja2-ansible-filters"
+        "lastModified": 1635348539,
+        "narHash": "sha256-SXrwF/KPz8McBN8kN+HTfGphE1hiRSr1mtXSVjPJr8o=",
+        "owner": "DavHau",
+        "repo": "mach-nix",
+        "rev": "98d001727542bb6142d0ab554fc30bd591b07c73",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://gitlab.com/dreamer-labs/libraries/jinja2-ansible-filters"
+        "owner": "DavHau",
+        "repo": "mach-nix",
+        "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1635776686,
-        "narHash": "sha256-NMN30hR7opRCGLI4NSuGSul4/ivZ3PoKDKhMSdLXdgQ=",
+        "lastModified": 1622797669,
+        "narHash": "sha256-xIyWeoYExzF0KNaKcqfxEX58fN4JTIQxTJWbsAujllc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "edebe874a4f0a6ea0c6eb8e80e1e0e173f59e692",
+        "rev": "1ca6b0a0cc38dbba0441202535c92841dd39d1ae",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "type": "github"
+        "id": "nixpkgs",
+        "ref": "nixos-unstable",
+        "type": "indirect"
       }
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1610729867,
-        "narHash": "sha256-bk/SBaBLqZX/PEqal27DMQwAHHl0dcZMp8NNksQr80s=",
+        "lastModified": 1635792138,
+        "narHash": "sha256-D79GqaYrwgyM4wvOPbQeKveAHROnVh97F36iSGZO9uA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "04af07c659c6723a2259bb6bc00a47ec53330f20",
+        "rev": "b165ce0c4efbb74246714b5c66b6bcdce8cde175",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
-    "plumbum": {
+    "pypi-deps-db": {
       "flake": false,
       "locked": {
-        "lastModified": 1612813564,
-        "narHash": "sha256-ATEInozJTmzNbLDDjiWMnA5IgVBG2hmKVyw/vsiPiu4=",
-        "owner": "tomerfiliba",
-        "repo": "plumbum",
-        "rev": "4ba32fef6a099c3c9655c3bbd96a43ffb964abb0",
+        "lastModified": 1622970040,
+        "narHash": "sha256-u//RFnae/XMIhoy83G2uH2Qu/1LiUhVCdwwY1xj4Ufs=",
+        "owner": "DavHau",
+        "repo": "pypi-deps-db",
+        "rev": "be6591698c67a86a69c81fef72167e38d038a9fc",
         "type": "github"
       },
       "original": {
-        "owner": "tomerfiliba",
-        "ref": "v1.7.0",
-        "repo": "plumbum",
-        "type": "github"
-      }
-    },
-    "poetry-dynamic-versioning": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1628535348,
-        "narHash": "sha256-xLodh4WTJjJPW75rWJ/CSybh85KEq0iLrB6wP3ya8g8=",
-        "owner": "mtkennerly",
-        "repo": "poetry-dynamic-versioning",
-        "rev": "652173383453ad9e15e270419ac0e63fcd221412",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mtkennerly",
-        "repo": "poetry-dynamic-versioning",
-        "type": "github"
-      }
-    },
-    "poetry2nix": {
-      "inputs": {
-        "flake-utils": "flake-utils_2",
-        "nixpkgs": "nixpkgs_2"
-      },
-      "locked": {
-        "lastModified": 1633382856,
-        "narHash": "sha256-hYlet806M9xJj4yxf0g5fhDT2IEUVIMAl7sqIeZ8DUM=",
-        "owner": "nix-community",
-        "repo": "poetry2nix",
-        "rev": "705cbfa10e3d9bfed2e59e0256844ae3704dbd7e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "poetry2nix",
-        "type": "github"
-      }
-    },
-    "pyyaml-include": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1635870690,
-        "narHash": "sha256-ax3xdyDXeMeT34U1OiovGJg3Y8otJ7B9Blg9pD+e1yw=",
-        "owner": "samuelludwig",
-        "repo": "pyyaml-include",
-        "rev": "0394534f483eb5f26b6c66c57ec41b8475070fdf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "samuelludwig",
-        "repo": "pyyaml-include",
+        "owner": "DavHau",
+        "repo": "pypi-deps-db",
         "type": "github"
       }
     },
@@ -196,14 +133,9 @@
       "inputs": {
         "dunamai": "dunamai",
         "flake-utils": "flake-utils",
-        "iteration-utilities": "iteration-utilities",
         "jinja2": "jinja2",
-        "jinja2-ansible-filters": "jinja2-ansible-filters",
-        "nixpkgs": "nixpkgs",
-        "plumbum": "plumbum",
-        "poetry-dynamic-versioning": "poetry-dynamic-versioning",
-        "poetry2nix": "poetry2nix",
-        "pyyaml-include": "pyyaml-include"
+        "mach-nix": "mach-nix",
+        "nixpkgs": "nixpkgs_2"
       }
     }
   },

@@ -3,26 +3,12 @@
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:NixOS/nixpkgs";
-    poetry2nix.url = "github:nix-community/poetry2nix";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    mach-nix.url = "github:DavHau/mach-nix";
 
     #
     # Non-nix-provided dependencies
     #
-    poetry-dynamic-versioning = {
-      url = "github:mtkennerly/poetry-dynamic-versioning";
-      flake = false;
-    };
-    iteration-utilities = {
-      url = "github:MSeifert04/iteration_utilities";
-      flake = false;
-    };
-    jinja2-ansible-filters = {
-      # Can't use typical gitlab access method 'cause subgroup :/
-      url =
-        "git+https://gitlab.com/dreamer-labs/libraries/jinja2-ansible-filters";
-      flake = false;
-    };
     # python39Packages.jinja2 is at version 3.0.1, we need 3.0.2
     jinja2 = {
       url = "github:pallets/jinja2";
@@ -32,50 +18,18 @@
       url = "github:mtkennerly/dunamai";
       flake = false;
     };
-    pyyaml-include = {
-      url = "github:samuelludwig/pyyaml-include";
-      flake = false;
-    };
-    plumbum = {
-      url = "github:tomerfiliba/plumbum/v1.7.0";
-      flake = false;
-    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, poetry2nix, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, mach-nix, ... }@inputs:
     let
       pkgs = nixpkgs.legacyPackages."x86_64-linux";
       pyPackages = pkgs.python39Packages;
       pyBuild = pyPackages.buildPythonPackage;
-      poetry-dynamic-versioning = pyBuild {
-        pname = "poetry-dynamic-versioning";
-        version = "0.13.1";
-        src = inputs.poetry-dynamic-versioning;
-        format = "pyproject";
-        propagatedBuildInputs = with pkgs // pyPackages; [
-          poetry
-          python
-          updatedJinja2
-          dunamai
-        ];
-      };
-      iteration-utilities = pyBuild {
-        pname = "iteration_utilities";
-        version = "0.11.0";
-        src = inputs.iteration-utilities;
-        doCheck = false; # Dies on setuptoolsCheckPhase, idk why sooo... /shrug
-      };
       updatedJinja2 = pyBuild {
         pname = "Jinja2";
         version = "3.0.2";
         src = inputs.jinja2;
         propagatedBuildInputs = with pyPackages; [ pyyaml markupsafe ];
-      };
-      jinja2-ansible-filters = pyBuild {
-        pname = "jinja2-ansible-filters";
-        version = "1.3.0";
-        src = inputs.jinja2-ansible-filters;
-        propagatedBuildInputs = with pyPackages; [ pyyaml updatedJinja2 ];
       };
       dunamai = pyBuild {
         pname = "dunamai";
@@ -84,60 +38,96 @@
         format = "pyproject";
         propagatedBuildInputs = with pyPackages; [ poetry ];
       };
-      pyyaml-include = pyBuild {
-        pname = "pyyaml-include";
-        version = "1.2.post2";
-        src = inputs.pyyaml-include;
-        doCheck = false;
-        format = "pyproject";
-        propagatedBuildInputs = with pyPackages; [ poetry pyyaml ];
-      };
-      plumbum170 = pyBuild {
-        pname = "plumbum";
-        version = "1.7.0";
-        src = inputs.plumbum;
-        doCheck = false;
-        propagatedBuildInputs = with pyPackages; [ poetry ];
-      };
-      # mkdocstrings = pyBuild {
-      #   pname = "mkdocstrings";
-      #   version = "1.7.0";
-      #   src = inputs.mkdocstrings;
-      #   doCheck = false;
-      #   format = "pyproject";
-      #   propagatedBuildInputs = with pkgs // pyPackages; [ mkdocs ];
-      # };
+      pkgOverride = { ps, lib, stdenv }:
+        (final: prev: {
+          jinja2 = updatedJinja2;
+          dunamai = dunamai;
+          pyyaml = pyPackages.pyyaml;
+          markupsafe = pyPackages.markupsafe;
+          pathspec = pyPackages.pathspec;
+          packaging = pyPackages.packaging;
+          six = pyPackages.six;
+          distlib = pyPackages.distlib;
+          virtualenv = pyPackages.virtualenv;
+          filelock = pyPackages.filelock;
+          requests-toolbelt = pyPackages.requests-toolbelt;
+          shellingham = pyPackages.shellingham;
+          tomlkit = pyPackages.tomlkit;
+          toml = pyPackages.toml;
+          #urllib3 = pyPackages.urllib3;
+          #cffi = pyPackages.cffi;
+          #pycparser = pyPackages.pycparser;
+        });
 
     in {
       # Nixpkgs overlay providing the application
-      overlay = nixpkgs.lib.composeManyExtensions [
-        poetry2nix.overlay
-        (final: prev: {
-          copier = prev.poetry2nix.mkPoetryApplication {
-            projectDir = ./.;
-            overrides = prev.poetry2nix.overrides.withDefaults (final: prev: {
-              inherit poetry-dynamic-versioning jinja2-ansible-filters
-                pyyaml-include;
-              poetry_core = pyPackages.poetry-core;
-              poetry-core = pyPackages.poetry-core;
-              dunamai = dunamai;
-              plumbum = pyPackages.plumbum;
-              virtualenv = pkgs.virtualenv;
-              jinja2 = updatedJinja2;
-              pyyaml = pyPackages.pyyaml;
-              packaging = pyPackages.packaging;
-              platformdirs = pyPackages.platformdirs;
-              toml = pyPackages.toml;
-              pastel = pyPackages.pastel;
-              tomlkit = pyPackages.tomlkit;
-              pexpect = pyPackages.pexpect;
-              ptyprocess = pyPackages.ptyprocess;
-              six = pyPackages.six;
-              #mkdocstrings = mkdocstrings;
-            });
-          };
-        })
-      ];
+      overlay = (final: prev: {
+        copier = mach-nix.lib."x86_64-linux".buildPythonPackage {
+          python = "python39";
+          pname = "copier";
+          version = "5.1.0";
+          providers.pyyaml = "nixpkgs";
+          providers.markupsafe = "nixpkgs";
+          providers.pathspec = "nixpkgs";
+          providers.packaging = "nixpkgs";
+          providers.six = "nixpkgs";
+          providers.distlib = "nixpkgs";
+          providers.virtualenv = "nixpkgs";
+          providers.filelock = "nixpkgs";
+          providers.requests-toolbelt = "nixpkgs";
+          providers.shellingham = "nixpkgs";
+          providers.tomlkit = "nixpkgs";
+          providers.toml = "nixpkgs";
+          providers.urllib3 = "nixpkgs";
+          providers.cffi = "nixpkgs";
+          providers.pycparser = "nixpkgs";
+          src = ./.;
+          format = "pyproject";
+          overridesPost = [
+            (pkgOverride {
+              ps = pkgs;
+              lib = pkgs.lib;
+              stdenv = pkgs.stdenv;
+            })
+          ];
+          requirements = ''
+            "backports.cached-property"
+            colorama
+            dunamai
+            importlib-metadata
+            iteration_utilities
+            Jinja2
+            jinja2-ansible-filters
+            mkdocs-material
+            mkdocs-mermaid2-plugin
+            mkdocstrings
+            packaging
+            pathspec
+            plumbum
+            pydantic
+            Pygments
+            PyYAML
+            pyyaml-include
+            questionary
+            typing-extensions
+
+            autoflake
+            black
+            flake8
+            flake8-bugbear
+            flake8-comprehensions
+            flake8-debugger
+            mypy
+            pexpect
+            poethepoet
+            pre-commit
+            pytest
+            pytest-cov
+            pytest-xdist
+            poetry
+          '';
+        };
+      });
     } // (flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
@@ -145,9 +135,9 @@
           overlays = [ self.overlay ];
         };
       in rec {
-        apps = { copier = pkgs.copier; };
+        apps = { copier = (flake-utils.lib.mkApp { drv = pkgs.copier; }); };
 
         defaultApp = apps.copier;
-        defaultPackage = apps.copier;
+        defaultPackage = pkgs.copier;
       }));
 }
